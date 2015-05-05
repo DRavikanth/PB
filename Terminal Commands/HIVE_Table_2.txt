@@ -1,0 +1,32 @@
+create table ipl_tweets(
+created_at string,
+id bigint,
+id_str string,
+text string,
+user_id bigint,
+geo_type string,
+geo_coord_lat float,
+geo_coord_long float,
+coordy_type string,
+cordy_coord_lat float,
+cordy_coord_long float,
+place_id string,
+place_type string,
+place_name string,
+place_ctry_code string,
+place_country string,
+place_full_name string,
+retweet_count int,
+favorite_count int,
+favorited boolean,
+retweeted boolean,
+possibly_sensitive boolean,
+filter_level string,
+lang string,
+timestamp_ms string
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+stored as textfile;
+Load Statement:
+Insert overwrite table ipl_tweets select created_at,id,id_str,text string,user_id,geo_type,geo_coord_lat,geo_coord_long,coordy_type,cordy_coord_lat,cordy_coord_long,place_id,place_type,place_name,place_ctry_code,place_country,place_full_name,retweet_count,favorite_count,
+favorited,retweeted,possibly_sensitive,filter_level,lang,timestamp_ms from master_table;

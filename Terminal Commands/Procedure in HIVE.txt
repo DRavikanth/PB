@@ -1,0 +1,4 @@
+1.Created a table “master_table” using Row Format as csv serde.
+2.Loaded all the tweets into the above hive table.
+3.Created three more tables “ipl_tweets”, “ipl_user_info”, ”ipl_ user_count_info” to store the individual data from the “master_table”. 
+4.In Hive shell, executed analytical queries to view and analyzing the data.

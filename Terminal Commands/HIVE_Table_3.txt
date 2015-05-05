@@ -1,0 +1,13 @@
+create table ipl_user_count_info(
+user_id bigint,
+user_followers_count bigint,
+user_friends_count bigint,
+user_listed_count bigint,
+user_favourites_count bigint,
+user_statuses_count bigint
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+stored as textfile;
+
+Load Statement:
+Insert overwrite table ipl_user_count_info select user_id,max(user_followers_count),max(user_friends_count),max(user_listed_count),max(user_favourites_count),max(user_statuses_count) from master_table group by user_id;

@@ -1,0 +1,114 @@
+----------Location from which we got most number of tweets:    
+hive>
+select place_name,count(*) count from ipl_tweets group by place_name;
+
+hive>
+create external table ctry_tweets (
+Country string,
+count int
+)
+ROW FORMAT serde 'com.bizo.hive.serde.csv.CSVSerde'
+with serdeproperties(
+"separatorChar" = "\,",
+"quoteChar" = "\"")
+stored as textfile
+location "/user/biadmin/PBProject/ctry_tweets";
+
+hive>
+Insert overwrite table ctry_tweets select place_name,count(*) count from ipl_tweets group by place_name having place_name is not null;
+
+hadoop terminal>
+hadoop fs -copyToLocal /user/biadmin/PBProject/ctry_tweets /home/biadmin/Desktop/Vamsee/place
+
+-----------Language based tweets count from dataset
+hive>
+select lang, count(*) from ipl_tweets group by lang having lang is not null;
+
+hive>
+create external table language_tweets (
+lang string,
+count int
+)
+ROW FORMAT serde 'com.bizo.hive.serde.csv.CSVSerde'
+with serdeproperties(
+"separatorChar" = "\,",
+"quoteChar" = "\"")
+stored as textfile
+location "/user/biadmin/PBProject/language_tweets";
+
+hive>
+Insert overwrite table language_tweets select lang,count(*) count from ipl_tweets group by lang having lang is not null;
+hadoop terminal>
+hadoop fs -copyToLocal /user/biadmin/PBProject/language_tweets /home/biadmin/Desktop/Vamsee/lang
+
+-----------User Contribution towards tweets in Data set:
+
+hive>
+select count(ti.text), ui.user_id, ui.user_name, ui.user_screen_name
+From ipl_tweets ti JOIN ipl_user_info ui
+ON (ti.user_id = ui.user_id)
+GROUP BY ui.user_id, ui.user_name, ui.user_screen_name;
+
+hive>
+create external table fuser_test (
+count int,
+user_id bigint,
+name string,
+screen_name string
+)
+ROW FORMAT serde 'com.bizo.hive.serde.csv.CSVSerde'
+with serdeproperties(
+"separatorChar" = "\,",
+"quoteChar" = "\"")
+stored as textfile
+location "/user/biadmin/PBProject/fuser_test"; 
+
+hive>
+Insert overwrite table fuser_test select count(ti.text), ui.user_id, ui.user_name, ui.user_screen_name
+From ipl_tweets ti JOIN ipl_user_info ui
+ON (ti.user_id = ui.user_id)
+GROUP BY ui.user_id, ui.user_name, ui.user_screen_name;
+
+Hadoop terminal>
+hadoop fs -copyToLocal /user/biadmin/PBProject/fuser_test /home/biadmin/Desktop/Vamsee/fuser
+
+-------------No. of users who created their twitter accounts in various years from the given dataset:
+select count(user_created_at) from ipl_user_info where user_created_at like '%2008%'
+select count(user_created_at) from ipl_user_info where user_created_at like '%2009%'
+select count(user_created_at) from ipl_user_info where user_created_at like '%2010%'
+select count(user_created_at) from ipl_user_info where user_created_at like '%2011%'
+select count(user_created_at) from ipl_user_info where user_created_at like '%2012%'
+select count(user_created_at) from ipl_user_info where user_created_at like '%2013%'
+select count(user_created_at) from ipl_user_info where user_created_at like '%2014%'
+
+------------No. of Tweets generated in  last 1 hour in an interval of 10 mins:
+Tweets generated between 'Tue Apr 28 20:14:13' and Tue Apr 28 20:24:13 +0000 2015 : 15
+select count(created_at) from ipl_tweets where created_at between 'Tue Apr 28 20:14:13' and 'Tue Apr 28 20:24:13';   ----  15
+select count(created_at) from ipl_tweets where created_at between 'Tue Apr 28 20:04:13'  and 'Tue Apr 28 20:14:13'     ---  33
+select count(created_at) from ipl_tweets where created_at between 'Tue Apr 28 19:54:13’ and 'Tue Apr 28 20:04:13'    ---- 33
+select count(created_at) from ipl_tweets where created_at between 'Tue Apr 28 19:44:13’  and 'Tue Apr 28 19:54:13’     ---- 21
+select count(created_at) from ipl_tweets where created_at between 'Tue Apr 28 19:34:13’  and 'Tue Apr 28 19:44:13’   ----  56
+select count(created_at) from ipl_tweets where created_at between 'Tue Apr 28 19:24:13’  and 'Tue Apr 28 19:34:13’    ---- 73
+
+
+------------Total no of Retweeted tweets in a dataset: 
+select count(*) from ipl_tweets where text like "RT%";
+Ans: 11704
+Query 7:
+
+How many tweets generated in last 5 mins:        --------   12
+select max(created_at) from ipl_tweets;   ---------------------  Tue Apr 28 20:24:13 +0000 2015
+select count(created_at) from ipl_tweets where created_at>'Tue Apr 28 20:19:13';
+
+Query 8:
+
+Which team got more tweets CSK or SRH?
+select count(created_at) from ipl_tweets where text like '%SRH%';    
+Ans:3876
+select count(created_at) from ipl_tweets where text like '%CSK%'
+Ans: 10976
+
+
+
+
+

@@ -1,0 +1,53 @@
+create table master_table(
+created_at string,
+id bigint,
+id_str string,
+text string,
+user_id bigint,
+user_id_str string,
+user_name string,
+user_screen_name string,
+user_location string,
+user_protected boolean,
+user_verified boolean,
+user_followers_count bigint,
+user_friends_count bigint,
+user_listed_count bigint,
+user_favourites_count bigint,
+user_statuses_count bigint,
+user_created_at string,
+user_utc_offset int,
+user_time_zone string,
+user_geo_enabled boolean,
+user_lang string,
+user_contributors_enabled boolean,
+user_is_translator boolean,
+geo_type string,
+geo_coord_lat float,
+geo_coord_long float,
+coordy_type string,
+cordy_coord_lat float,
+cordy_coord_long float,
+place_id string,
+place_type string,
+place_name string,
+place_ctry_code string,
+place_country string,
+place_full_name string,
+retweet_count int,
+favorite_count int,
+favorited boolean,
+retweeted boolean,
+possibly_sensitive boolean,
+filter_level string,
+lang string,
+timestamp_ms string
+)
+ROW FORMAT serde 'com.bizo.hive.serde.csv.CSVSerde'
+with serdeproperties(
+"separatorChar" = "\,",
+"quoteChar" = "\"")
+stored as textfile;
+
+Load Statement:
+load data local inpath "/home/biadmin/PB/csv_output/output1.csv" into table master_tweets;
